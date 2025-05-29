@@ -1,6 +1,7 @@
 package br.com.project.TRFamilia.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -21,5 +22,14 @@ public class UserService {
 		user.setPassword(cryptedPassword);
 
 		return userRepository.save(user);
+	}
+
+	public ResponseEntity<?> loginUser(User user) {
+		User existingUser = userRepository.findById(user.getId()).orElse(null);
+		if (existingUser != null && passwordEncoder.matches(user.getPassword(), existingUser.getPassword())) {
+			return "Login successful for user";
+		} else {
+			return "Invalid username or password";
+		}
 	}
 }

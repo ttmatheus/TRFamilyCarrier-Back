@@ -1,4 +1,4 @@
-package br.com.project.TRFamilia.config;
+package br.com.project.TRFamilia.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
