@@ -1,72 +1,72 @@
 package br.com.project.TRFamilia.models;
 
+import java.time.LocalDateTime;
+
+import org.hibernate.annotations.CreationTimestamp;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 
 @Entity
-@Table(name = "users")
+@Table(name = "usuarios")
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	private String name;
+	private String nome;
 
-	@NotBlank(message = "O email não pode estar vazio.")
-	@Email(message = "Email inválido.")
 	private String email;
 
-	// Validando que a senha não deve ser nula ou vazia
-	@NotBlank(message = "A senha não pode estar vazia.")
-	// Validando o tamanho mínimo da senha
-	@Size(min = 8, message = "A senha deve conter pelo menos 8 caracteres.")
-	// Validando a senha
-	@Pattern(
-		regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$",
-		message = "A senha deve conter pelo menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial."
-	)
-	private String password;
+	@Column(name = "senha_hash")
+	private String senhaHash;
+
+	@Enumerated(EnumType.STRING)
+	private TipoUsuario tipo;
+
+	private boolean ativo;
+
+	@CreationTimestamp
+	@Column(name = "criado_em", updatable = false)
+	private LocalDateTime criadoEm;
 
 	public User() {}
 
-	public User(String name, String email, String password) {
-		this.name = name;
+	public User(String nome, String email, String senhaHash, TipoUsuario tipo, boolean ativo) {
+		this.nome = nome;
 		this.email = email;
-		this.password = password;
+		this.senhaHash = senhaHash;
+		this.tipo = tipo;
+		this.ativo = ativo;
 	}
 
-	public String getPassword() {
-		return password;
-	}
+	public String getSenhaHash() { return senhaHash; }
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+	public void setSenhaHash(String password) { this.senhaHash = password; }
 
-	public String getEmail() {
-		return email;
-	}
+	public String getEmail() { return email; }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+	public void setEmail(String email) { this.email = email; }
 
-	public Long getId() {
-		return id;
-	}
+	public Long getId() { return id; }
 
-	public String getName() {
-		return name;
-	}
+	public String getNome() { return nome; }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+	public void setNome(String name) { this.nome = name; }
+
+	public TipoUsuario getTipo() { return tipo; }
+
+	public void setTipo(TipoUsuario tipo) { this.tipo = tipo; }
+
+	public boolean isAtivo() { return ativo; }
+
+	public void setAtivo(boolean ativo) { this.ativo = ativo; }
+
+	public LocalDateTime getCriadoEm() { return criadoEm; }
 }
