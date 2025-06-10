@@ -46,9 +46,9 @@ public class User {
 		this.ativo = ativo;
 	}
 
-	public String getSenhaHash() { return senhaHash; }
+	public String getHashPassword() { return senhaHash; }
 
-	public void setSenhaHash(String password) { this.senhaHash = password; }
+	public void setHashPassword(String password) { this.senhaHash = password; }
 
 	public String getEmail() { return email; }
 

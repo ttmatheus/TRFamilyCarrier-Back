@@ -17,13 +17,13 @@ public class LoginDTO {
 		regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&#]{8,}$",
 		message = "A senha deve conter pelo menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial."
 	)
-	private String senha;
+	private String password;
 
 	public LoginDTO() {}
 
-	public LoginDTO(String email, String senha) {
+	public LoginDTO(String email, String password) {
 		this.email = email;
-		this.senha = senha;
+		this.password = password;
 	}
 
 	public String getEmail() {
@@ -34,11 +34,11 @@ public class LoginDTO {
 		this.email = email;
 	}
 
-	public String getSenha() {
-		return senha;
+	public String getPassword() {
+		return password;
 	}
 
-	public void setSenha(String senha) {
-		this.senha = senha;
+	public void setPassword(String password) {
+		this.password = password;
 	}
 }

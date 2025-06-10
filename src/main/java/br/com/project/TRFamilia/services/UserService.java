@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 
 import br.com.project.TRFamilia.dto.CreateUserDTO;
 import br.com.project.TRFamilia.dto.LoginDTO;
+import br.com.project.TRFamilia.dto.LoginResponseDTO;
+import br.com.project.TRFamilia.dto.UserInfoDTO;
 import br.com.project.TRFamilia.models.TipoUsuario;
 import br.com.project.TRFamilia.models.User;
 import br.com.project.TRFamilia.repositories.UserRepository;
@@ -28,7 +30,7 @@ public class UserService {
 	private JwtUtil jwtUtil;
 
 	public User saveUser(CreateUserDTO userDto) {
-		String cryptedPassword = passwordEncoder.encode(userDto.getSenha());
+		String cryptedPassword = passwordEncoder.encode(userDto.getPassword());
 
 		User user = new User(
 			userDto.getNome(),
@@ -43,8 +45,13 @@ public class UserService {
 
 	public ResponseEntity<?> loginUser(LoginDTO user) {
 		Optional<User> userOpt = userRepository.findByEmail(user.getEmail());
-		if (userOpt.isPresent() && passwordEncoder.matches(user.getSenha(), userOpt.get().getSenhaHash())) {
-			return ResponseEntity.ok(jwtUtil.generateToken(user.getEmail()));
+		if (userOpt.isPresent() && passwordEncoder.matches(user.getPassword(), userOpt.get().getHashPassword())) {
+			User userFinded = userOpt.get();
+			
+			UserInfoDTO userInfo = new UserInfoDTO(userFinded.getTipo().toString());
+			LoginResponseDTO response = new LoginResponseDTO(jwtUtil.generateToken(userFinded.getEmail()), userInfo);
+
+			return ResponseEntity.ok(response);
 		} else {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Email ou senha inválidos");
 		}

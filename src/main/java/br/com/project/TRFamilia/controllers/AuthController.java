@@ -3,7 +3,7 @@ package br.com.project.TRFamilia.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,9 +16,15 @@ public class AuthController {
 	@Autowired
 	AuthService authService;
 
-	@GetMapping("/validateJwt/{token}")
-	public ResponseEntity<?> validateJwt(@PathVariable String token) {
-		return authService.validateJwt(token);
+	@GetMapping("/validateJwt")
+	public ResponseEntity<?> validateJwt(@RequestHeader("Authorization") String authHeader) {
+		if(authHeader != null && authHeader.startsWith("Bearer ")) {
+			String token = authHeader.substring(7);
+			return authService.validateJwt(token);
+		} else {
+			return ResponseEntity.badRequest().body("Missing or invalid Authorization header");
+		}
+		
 	} 
 	
 }

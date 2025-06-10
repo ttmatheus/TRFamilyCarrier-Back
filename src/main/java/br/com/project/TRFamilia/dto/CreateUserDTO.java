@@ -33,11 +33,11 @@ public class CreateUserDTO {
 		this.senha = senhaHash;
 	}
 
-	public String getSenha() {
+	public String getPassword() {
 		return senha;
 	}
 
-	public void setSenha(String password) {
+	public void setPassword(String password) {
 		this.senha = password;
 	}
 
