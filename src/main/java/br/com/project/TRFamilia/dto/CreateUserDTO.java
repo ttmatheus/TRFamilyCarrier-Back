@@ -7,38 +7,38 @@ import jakarta.validation.constraints.Size;
 
 public class CreateUserDTO {
 
-	@NotBlank(message = "O nome não pode estar vazio.")
-	private String nome;
+	@NotBlank(message = "Name cannot be empty.")
+	private String name;
 
-	@NotBlank(message = "O email não pode estar vazio.")
-	@Email(message = "Email inválido.")
+	@NotBlank(message = "Email cannot be empty.")
+	@Email(message = "Invalid email")
 	private String email;
 
 	// Validando que a senha não deve ser nula ou vazia
-	@NotBlank(message = "A senha não pode estar vazia.")
+	@NotBlank(message = "Password cannot be empty.")
 	// Validando o tamanho mínimo da senha
-	@Size(min = 8, message = "A senha deve conter pelo menos 8 caracteres.")
+	@Size(min = 8, message = "Password must contain at least 8 characters.")
 	// Validando a senha
 	@Pattern(
 		regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&#]{8,}$",
-		message = "A senha deve conter pelo menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial."
+		message = "The password must contain at least one uppercase letter, one lowercase letter, one number, and one special character."
 	)
-	private String senha;
+	private String password;
 
 	public CreateUserDTO() {}
 
-	public CreateUserDTO(String nome, String email, String senhaHash) {
-		this.nome = nome;
+	public CreateUserDTO(String nome, String email, String password) {
+		this.name = nome;
 		this.email = email;
-		this.senha = senhaHash;
+		this.password = password;
 	}
 
 	public String getPassword() {
-		return senha;
+		return password;
 	}
 
 	public void setPassword(String password) {
-		this.senha = password;
+		this.password = password;
 	}
 
 	public String getEmail() {
@@ -50,10 +50,10 @@ public class CreateUserDTO {
 	}
 
 	public String getNome() {
-		return nome;
+		return name;
 	}
 
 	public void setNome(String name) {
-		this.nome = name;
+		this.name = name;
 	}
 }

@@ -9,13 +9,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import br.com.project.TRFamilia.dto.CreateUserDTO;
-import br.com.project.TRFamilia.dto.LoginDTO;
-import br.com.project.TRFamilia.dto.LoginResponseDTO;
-import br.com.project.TRFamilia.dto.UserInfoDTO;
-import br.com.project.TRFamilia.models.TipoUsuario;
 import br.com.project.TRFamilia.models.User;
+import br.com.project.TRFamilia.models.UserType;
 import br.com.project.TRFamilia.repositories.UserRepository;
-import br.com.project.TRFamilia.security.JwtUtil;
 
 @Service
 public class UserService {
@@ -26,34 +22,23 @@ public class UserService {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
-	@Autowired
-	private JwtUtil jwtUtil;
-
-	public User saveUser(CreateUserDTO userDto) {
+	public ResponseEntity<?> saveUser(CreateUserDTO userDto) {
+		Optional<User> emailExists = userRepository.findByEmail(userDto.getEmail());
+		if(emailExists.isPresent()) {
+			return ResponseEntity.status(HttpStatus.CONFLICT).body("Email already exists.");
+		}
 		String cryptedPassword = passwordEncoder.encode(userDto.getPassword());
 
 		User user = new User(
 			userDto.getNome(),
 			userDto.getEmail(),
 			cryptedPassword,
-			TipoUsuario.motorista,
+			UserType.driver,
 			true
 		);
 
-		return userRepository.save(user);
-	}
+		userRepository.save(user);
 
-	public ResponseEntity<?> loginUser(LoginDTO user) {
-		Optional<User> userOpt = userRepository.findByEmail(user.getEmail());
-		if (userOpt.isPresent() && passwordEncoder.matches(user.getPassword(), userOpt.get().getHashPassword())) {
-			User userFinded = userOpt.get();
-			
-			UserInfoDTO userInfo = new UserInfoDTO(userFinded.getTipo().toString());
-			LoginResponseDTO response = new LoginResponseDTO(jwtUtil.generateToken(userFinded.getEmail()), userInfo);
-
-			return ResponseEntity.ok(response);
-		} else {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Email ou senha inválidos");
-		}
+		return ResponseEntity.ok(user);
 	}
 }

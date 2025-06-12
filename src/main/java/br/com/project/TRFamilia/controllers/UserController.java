@@ -8,8 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.project.TRFamilia.dto.CreateUserDTO;
-import br.com.project.TRFamilia.dto.LoginDTO;
-import br.com.project.TRFamilia.models.User;
 import br.com.project.TRFamilia.services.UserService;
 import jakarta.validation.Valid;
 
@@ -21,11 +19,7 @@ public class UserController {
 	private UserService userService;
 
 	@PostMapping("/create")
-	public User createUser(@RequestBody @Valid CreateUserDTO user) {
+	public ResponseEntity<?> createUser(@RequestBody @Valid CreateUserDTO user) {
 		return userService.saveUser(user);
-	}
-	@PostMapping("/login")
-	public ResponseEntity<?> loginUser(@RequestBody @Valid LoginDTO login) {
-		return userService.loginUser(login);
 	}
 }
