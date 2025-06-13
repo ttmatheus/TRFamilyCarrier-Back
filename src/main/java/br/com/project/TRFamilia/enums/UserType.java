@@ -1,4 +1,4 @@
-package br.com.project.TRFamilia.models;
+package br.com.project.TRFamilia.enums;
 
 public enum UserType {
 	driver,

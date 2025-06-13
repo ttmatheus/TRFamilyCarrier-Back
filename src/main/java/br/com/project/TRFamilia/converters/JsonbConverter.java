@@ -1,33 +1,36 @@
 package br.com.project.TRFamilia.converters;
 
+import java.util.Map;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 
 @Converter(autoApply = false)
-public class JsonbConverter implements AttributeConverter<Object, String> {
+public class JsonbConverter implements AttributeConverter<Map<String, String>, String> {
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
-    public String convertToDatabaseColumn(Object attribute) {
+    public String convertToDatabaseColumn(Map<String, String> attribute) {
         if (attribute == null) return null;
         try {
             return objectMapper.writeValueAsString(attribute);
         } catch (JsonProcessingException e) {
-            throw new IllegalArgumentException("Error converting object to JSON", e);
+            throw new IllegalArgumentException("Error converting Map to JSON", e);
         }
     }
 
     @Override
-    public Object convertToEntityAttribute(String dbData) {
+    public Map<String, String> convertToEntityAttribute(String dbData) {
         if (dbData == null) return null;
         try {
-            return objectMapper.readValue(dbData, Object.class);
+            return objectMapper.readValue(dbData, new TypeReference<Map<String, String>>() {});
         } catch (JsonProcessingException e) {
-            throw new IllegalArgumentException("Error converting JSON to object", e);
+            throw new IllegalArgumentException("Error converting JSON to Map", e);
         }
     }
 }

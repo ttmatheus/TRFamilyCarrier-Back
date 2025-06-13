@@ -1,25 +1,24 @@
 package br.com.project.TRFamilia.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.project.TRFamilia.dto.CreateDriverDTO;
-import br.com.project.TRFamilia.services.DriverService;
+import br.com.project.TRFamilia.dto.CreateTruckDTO;
+import br.com.project.TRFamilia.models.Truck;
+import br.com.project.TRFamilia.services.TruckService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("driver")
-public class DriverController {
+@RequestMapping("truck")
+public class TruckController {
 
-	@Autowired
-	private DriverService driverService;
+	@Autowired private TruckService truckService;
 
 	@PostMapping("/create")
-	public ResponseEntity<?> createUser(@RequestBody @Valid CreateDriverDTO driver) {
-		return driverService.saveDriver(driver);
+	public Truck createTruck(@RequestBody @Valid CreateTruckDTO createTruckDto) {
+		return truckService.saveTruck(createTruckDto);
 	}
 }

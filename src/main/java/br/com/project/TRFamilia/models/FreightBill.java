@@ -3,8 +3,13 @@ package br.com.project.TRFamilia.models;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import br.com.project.TRFamilia.enums.FreightBillStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -18,9 +23,10 @@ public class FreightBill {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @OneToOne
+    @JsonManagedReference
     @JoinColumn(name = "trip_id", nullable = false, unique = true)
     private Trip trip;
 
@@ -43,7 +49,8 @@ public class FreightBill {
     private BigDecimal companyRevenue;
 
     @Column(name = "payment_status")
-    private String paymentStatus;
+    @Enumerated(EnumType.STRING)
+    private FreightBillStatus paymentStatus;
 
     @Column(name = "notes")
     private String notes;
@@ -57,12 +64,10 @@ public class FreightBill {
     public FreightBill() {
     }
 
-    public FreightBill(Long id, Trip trip, BigDecimal initialValue, BigDecimal remainingValue,
+    public FreightBill(BigDecimal initialValue, BigDecimal remainingValue,
                        BigDecimal truckExpensesTotal, BigDecimal tripExpensesTotal, BigDecimal driverPaymentValue,
-                       BigDecimal companyRevenue, String paymentStatus, String notes, LocalDateTime createdAt,
-                       LocalDateTime updatedAt) {
-        this.id = id;
-        this.trip = trip;
+                       BigDecimal companyRevenue, FreightBillStatus paymentStatus, String notes, LocalDateTime createdAt,
+                       LocalDateTime updatedAt, Trip trip) {
         this.initialValue = initialValue;
         this.remainingValue = remainingValue;
         this.truckExpensesTotal = truckExpensesTotal;
@@ -73,22 +78,19 @@ public class FreightBill {
         this.notes = notes;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.trip = trip;
     }
 
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Trip getTripId() {
+    public Trip getTrip() {
         return trip;
     }
 
-    public void setTripId(Trip trip) {
+    public void setTrip(Trip trip) {
         this.trip = trip;
     }
 
@@ -140,11 +142,11 @@ public class FreightBill {
         this.companyRevenue = companyRevenue;
     }
 
-    public String getPaymentStatus() {
+    public FreightBillStatus getPaymentStatus() {
         return paymentStatus;
     }
 
-    public void setPaymentStatus(String paymentStatus) {
+    public void setPaymentStatus(FreightBillStatus paymentStatus) {
         this.paymentStatus = paymentStatus;
     }
 

@@ -4,8 +4,13 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import br.com.project.TRFamilia.enums.TruckStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -13,6 +18,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "trucks")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Truck {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,7 +55,8 @@ public class Truck {
     private LocalDate insuranceExpiration;
 
     @Column(name = "status")
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private TruckStatus status;
 
     @Column(name = "notes")
     private String notes;
@@ -63,11 +70,10 @@ public class Truck {
     public Truck() {
     }
 
-    public Truck(Long id, String licensePlate, BigDecimal currentMileage, String brand, String model, Integer year,
+    public Truck(String licensePlate, BigDecimal currentMileage, String brand, String model, Integer year,
                  String vinNumber, String fuelType, BigDecimal maxLoadCapacity, LocalDate maintenanceDueDate,
-                 LocalDate insuranceExpiration, String status, String notes, LocalDateTime createdAt,
+                 LocalDate insuranceExpiration, TruckStatus status, String notes, LocalDateTime createdAt,
                  LocalDateTime updatedAt) {
-        this.id = id;
         this.licensePlate = licensePlate;
         this.currentMileage = currentMileage;
         this.brand = brand;
@@ -172,11 +178,11 @@ public class Truck {
         this.insuranceExpiration = insuranceExpiration;
     }
 
-    public String getStatus() {
+    public TruckStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(TruckStatus status) {
         this.status = status;
     }
 

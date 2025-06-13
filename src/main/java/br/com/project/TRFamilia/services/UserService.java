@@ -9,8 +9,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import br.com.project.TRFamilia.dto.CreateUserDTO;
+import br.com.project.TRFamilia.enums.UserType;
 import br.com.project.TRFamilia.models.User;
-import br.com.project.TRFamilia.models.UserType;
 import br.com.project.TRFamilia.repositories.UserRepository;
 
 @Service

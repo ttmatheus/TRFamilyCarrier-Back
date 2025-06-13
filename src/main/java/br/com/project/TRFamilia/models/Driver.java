@@ -4,13 +4,20 @@ import java.time.LocalDateTime;
 import java.util.Map;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.hibernate.validator.constraints.br.CPF;
+import org.hibernate.type.SqlTypes;
 
-import br.com.project.TRFamilia.converters.JsonbConverter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import br.com.project.TRFamilia.enums.DriverStatus;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -25,11 +32,11 @@ public class Driver {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@OneToOne
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnore
 	@JoinColumn(name = "user_id", nullable = false, unique = true)
 	private User user;
 
-	@CPF
 	private String cpf;
 
 	@Column(name = "license_number")
@@ -49,18 +56,22 @@ public class Driver {
 	@Column(name = "hire_date")
 	private LocalDateTime hireDate;
 
-	@Convert(converter = JsonbConverter.class)
+	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(columnDefinition = "jsonb")
 	private Map<String, String> stats;
 
-	@Column(name = "current_trip_id")
+    @OneToOne(fetch = FetchType.LAZY)
+    @JsonManagedReference
+    @JoinColumn(name = "current_trip_id")
 	private Trip trip;
 
-	@OneToOne
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonManagedReference
 	@JoinColumn(name = "truck_id")
 	private Truck truck;
 
-	private String status;
+    @Enumerated(EnumType.STRING)
+	private DriverStatus status;
 
 	@CreationTimestamp
 	@Column(name = "created_at")
@@ -69,6 +80,28 @@ public class Driver {
 	@UpdateTimestamp
 	@Column(name = "updated_at")
 	private LocalDateTime updatedAt;
+
+    public Driver() {
+
+    }
+
+    public Driver(User user, String cpf, String licenseNumber, LocalDateTime licenseExpiration,
+     String phoneNumber, String address, LocalDateTime birthDate, LocalDateTime hireDate, Map<String,
+      String> stats, Truck truck, DriverStatus status, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.user = user;
+        this.cpf = cpf;
+        this.licenseNumber = licenseNumber;
+        this.licenseExpiration = licenseExpiration;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
+        this.birthDate = birthDate;
+        this.hireDate = hireDate;
+        this.stats = stats;
+        this.truck = truck;
+        this.status = status;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
 
 	public Long getId() {
         return id;
@@ -154,19 +187,19 @@ public class Driver {
         this.trip = trip;
     }
 
-    public Truck getTrucks() {
+    public Truck getTruck() {
         return truck;
     }
 
-    public void setTrucks(Truck truck) {
+    public void setTruck(Truck truck) {
         this.truck = truck;
     }
 
-    public String getStatus() {
+    public DriverStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(DriverStatus status) {
         this.status = status;
     }
 

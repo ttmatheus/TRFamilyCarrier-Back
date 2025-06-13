@@ -7,15 +7,13 @@ import jakarta.validation.constraints.Size;
 
 public class CreateUserDTO {
 
-	@NotBlank(message = "Name cannot be empty.")
+	@NotBlank
 	private String name;
 
-	@NotBlank(message = "Email cannot be empty.")
+	@NotBlank
 	@Email(message = "Invalid email")
 	private String email;
 
-	// Validando que a senha não deve ser nula ou vazia
-	@NotBlank(message = "Password cannot be empty.")
 	// Validando o tamanho mínimo da senha
 	@Size(min = 8, message = "Password must contain at least 8 characters.")
 	// Validando a senha

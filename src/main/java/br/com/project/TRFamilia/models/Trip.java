@@ -3,8 +3,14 @@ package br.com.project.TRFamilia.models;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import br.com.project.TRFamilia.enums.TripStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -22,9 +28,11 @@ public class Trip {
 
 	@OneToOne
     @JoinColumn(name = "driver_id", nullable = false, unique = true)
+    @JsonBackReference
     private Driver driver;
 
 	@OneToOne
+    @JsonManagedReference
     @JoinColumn(name = "truck_id", nullable = false, unique = true)
     private Truck truck;
 
@@ -79,11 +87,14 @@ public class Trip {
     @Column(name = "commission_percentage")
     private BigDecimal commissionPercentage;
 
-    @Column(name = "freight_bill_id")
-    private Long freightBillId;
+    @OneToOne
+    @JsonBackReference
+    @JoinColumn(name = "freightbill_id", nullable = true, unique = true)
+    private FreightBill freightBill;
 
     @Column(name = "status")
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private TripStatus status;
 
     @Column(name = "notes")
     private String notes;
@@ -97,14 +108,13 @@ public class Trip {
     public Trip() {
     }
 
-    public Trip(Long id, Driver driver, Truck truck, LocalDateTime departureTime, LocalDateTime arrivalTime,
+    public Trip(Driver driver, Truck truck, LocalDateTime departureTime, LocalDateTime arrivalTime,
                 LocalDateTime returnTime, String origin, String destination, Double originLatitude,
                 Double originLongitude, Double destinationLatitude, Double destinationLongitude,
                 BigDecimal initialMileage, BigDecimal finalMileage, String cargoDescription,
                 BigDecimal cargoWeight, String receiverName, String receiverDocument, BigDecimal totalValue,
-                BigDecimal commissionPercentage, Long freightBillId, String status, String notes,
+                BigDecimal commissionPercentage, TripStatus status, String notes,
                 LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this.id = id;
         this.driver = driver;
         this.truck = truck;
         this.departureTime = departureTime;
@@ -124,7 +134,6 @@ public class Trip {
         this.receiverDocument = receiverDocument;
         this.totalValue = totalValue;
         this.commissionPercentage = commissionPercentage;
-        this.freightBillId = freightBillId;
         this.status = status;
         this.notes = notes;
         this.createdAt = createdAt;
@@ -139,11 +148,11 @@ public class Trip {
         this.id = id;
     }
 
-    public Driver getDriverId() {
+    public Driver getDriver() {
         return driver;
     }
 
-    public void setDriverId(Driver driver) {
+    public void setDriver(Driver driver) {
         this.driver = driver;
     }
 
@@ -291,19 +300,19 @@ public class Trip {
         this.commissionPercentage = commissionPercentage;
     }
 
-    public Long getFreightBillId() {
-        return freightBillId;
+    public FreightBill getFreightBill() {
+        return freightBill;
     }
 
-    public void setFreightBillId(Long freightBillId) {
-        this.freightBillId = freightBillId;
+    public void setFreightBill(FreightBill freightBill) {
+        this.freightBill = freightBill;
     }
 
-    public String getStatus() {
+    public TripStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(TripStatus status) {
         this.status = status;
     }
 

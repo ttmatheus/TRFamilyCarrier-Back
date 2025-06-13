@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import br.com.project.TRFamilia.models.FreightBill;
 
 @Repository
-public interface FreightBillRepository extends JpaRepository<FreightBill, Long>{
+public interface FreightBillRepository extends JpaRepository<FreightBill, Integer>{
 	
 }

@@ -7,19 +7,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.project.TRFamilia.dto.CreateDriverDTO;
-import br.com.project.TRFamilia.services.DriverService;
+import br.com.project.TRFamilia.dto.CreateTripDTO;
+import br.com.project.TRFamilia.services.TripService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("driver")
-public class DriverController {
-
-	@Autowired
-	private DriverService driverService;
+@RequestMapping("trip")
+public class TripController {
+	@Autowired private TripService tripService;
 
 	@PostMapping("/create")
-	public ResponseEntity<?> createUser(@RequestBody @Valid CreateDriverDTO driver) {
-		return driverService.saveDriver(driver);
+	public ResponseEntity<?> createTrip(@RequestBody @Valid CreateTripDTO createTripDTO) {
+		return tripService.saveTrip(createTripDTO);
 	}
 }
