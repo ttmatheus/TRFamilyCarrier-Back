@@ -1,5 +1,6 @@
 package br.com.project.TRFamilia.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,5 +44,15 @@ public class UserService {
 		userRepository.save(user);
 
 		return ResponseEntity.ok(user);
+	}
+
+	public List<User> getAdmins() {
+		return userRepository.findByUserType(UserType.admin);
+	}
+	public List<User> getDrivers() {
+		return userRepository.findByUserType(UserType.driver);
+	}
+	public List<User> getAllUsers() {
+		return userRepository.findAll();
 	}
 }
