@@ -35,6 +35,7 @@ public class OpenApiConfig {
 		return GroupedOpenApi.builder()
 			.group("secured")
 			.pathsToMatch("/**")
+			.pathsToExclude("/auth/login", "/swagger-ui/**", "/v3/api-docs/**")
 			.addOperationCustomizer((operation, handlerMethod) -> {
 				operation.addSecurityItem(new SecurityRequirement().addList(SECURITY_SCHEME_NAME));
 				return operation;

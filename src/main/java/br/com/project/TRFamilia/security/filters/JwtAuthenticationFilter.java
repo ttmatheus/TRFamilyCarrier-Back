@@ -3,57 +3,69 @@ package br.com.project.TRFamilia.security.filters;
 import java.io.IOException;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import br.com.project.TRFamilia.security.JwtUtil;
 import io.jsonwebtoken.JwtException;
-import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.ServletRequest;
-import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-public class JwtAuthenticationFilter implements Filter {
+import org.springframework.lang.NonNull;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.filter.OncePerRequestFilter;
 
-	@Autowired
-	public JwtUtil jwtUtil;
+import java.util.Collections;
 
-	@Override
-	public void doFilter(
-		ServletRequest request,
-		ServletResponse response,
-		FilterChain chain
-	) throws IOException, ServletException {
-		HttpServletRequest httpRequest = (HttpServletRequest) request;
-		HttpServletResponse httpResponse = (HttpServletResponse) response;
+public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
+    private final JwtUtil jwtUtil;
 
-		String authHeader = httpRequest.getHeader("Authorization");
-		if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-			httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-			httpResponse.getWriter().write("Unauthorized: Missing or invalid token");
-			return;
-		}
+    public JwtAuthenticationFilter(JwtUtil jwtUtil) {
+        this.jwtUtil = jwtUtil;
+    }
 
-		String token = authHeader.replace("Bearer ", "");
+    @Override
+    protected void doFilterInternal(@NonNull HttpServletRequest request,
+                                    @NonNull HttpServletResponse response,
+                                    @NonNull FilterChain filterChain) throws ServletException, IOException {
 
-		System.out.println("Claims: " + token);
-		
+        String authHeader = request.getHeader("Authorization");
 
-		try {
-			Map<String, Object> claims = jwtUtil.extractUserClaim(token);
-			
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            filterChain.doFilter(request, response);
+            return; // deixa passar para o próximo filtro, pode ser rota pública
+        }
 
-			request.setAttribute("userEmail", claims.get("userEmail"));
-			request.setAttribute("userId", claims.get("userId"));
-			request.setAttribute("userRole", claims.get("userRole"));
+        String token = authHeader.substring(7);
 
-			chain.doFilter(request, response);
-		} catch (JwtException | IllegalArgumentException e) {
-			httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-			httpResponse.getWriter().write("Unauthorized: Invalid token");
-		}
-	}
+        try {
+            Map<String, Object> claims = jwtUtil.extractUserClaim(token);
+
+            String userEmail = (String) claims.get("email");
+            String userRole = (String) claims.get("role");
+			Integer userId = (Integer) claims.get("id");
+
+            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                    userEmail,
+                    null,
+                    Collections.singletonList(new SimpleGrantedAuthority(userRole))
+            );
+
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            request.setAttribute("userEmail", userEmail);
+            request.setAttribute("userRole", userRole);
+			request.setAttribute("userId", userId);
+
+        } catch (JwtException | IllegalArgumentException e) {
+			e.printStackTrace();
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("Unauthorized: Invalid token");
+            return;
+        }
+
+        filterChain.doFilter(request, response);
+    }
 }
