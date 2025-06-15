@@ -13,6 +13,7 @@ import jakarta.validation.Valid;
 @RequestMapping("/freight-bill")
 public class FreightBillController {
 
+<<<<<<< HEAD
     @Autowired private FreightBillService freightBillService;
 
     @PostMapping("/create")
@@ -38,3 +39,11 @@ public class FreightBillController {
         return freightBillService.getFreightBillById(id);
     }
 }
+=======
+	@PostMapping("/create")
+	@JustAdmin
+	public ResponseEntity<?> createFreightBill(@RequestBody @Valid CreateFreightBillDTO createFreightBillDTO) {
+		return freightBillService.saveFreightBill(createFreightBillDTO);
+	}
+}
+>>>>>>> 45402c9ebaafbaeb775fdea8800ea2a6a2cf73c3

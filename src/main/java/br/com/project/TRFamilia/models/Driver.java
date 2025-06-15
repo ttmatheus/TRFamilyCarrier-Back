@@ -24,9 +24,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "drivers")
+@Getter
+@Setter
 public class Driver {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -101,113 +105,5 @@ public class Driver {
         this.status = status;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-    }
-
-	public Long getId() {
-        return id;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public String getCpf() {
-        return cpf;
-    }
-
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
-    }
-
-    public String getLicenseNumber() {
-        return licenseNumber;
-    }
-
-    public void setLicenseNumber(String licenseNumber) {
-        this.licenseNumber = licenseNumber;
-    }
-
-    public LocalDateTime getLicenseExpiration() {
-        return licenseExpiration;
-    }
-
-    public void setLicenseExpiration(LocalDateTime licenseExpiration) {
-        this.licenseExpiration = licenseExpiration;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public LocalDateTime getBirthDate() {
-        return birthDate;
-    }
-
-    public void setBirthDate(LocalDateTime birthDate) {
-        this.birthDate = birthDate;
-    }
-
-    public LocalDateTime getHireDate() {
-        return hireDate;
-    }
-
-    public void setHireDate(LocalDateTime hireDate) {
-        this.hireDate = hireDate;
-    }
-
-    public Map<String, String> getStats() {
-        return stats;
-    }
-
-    public void setStats(Map<String, String> stats) {
-        this.stats = stats;
-    }
-
-    public Trip getCurrentTripId() {
-        return trip;
-    }
-
-    public void setCurrentTripId(Trip trip) {
-        this.trip = trip;
-    }
-
-    public Truck getTruck() {
-        return truck;
-    }
-
-    public void setTruck(Truck truck) {
-        this.truck = truck;
-    }
-
-    public DriverStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(DriverStatus status) {
-        this.status = status;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
     }
 }

@@ -11,9 +11,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "expenses")
+@Getter
+@Setter
 public class Expense {
 
     @Id
@@ -58,78 +62,6 @@ public class Expense {
         this.expenseDate = expenseDate;
         this.receiptUrl = receiptUrl;
         this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Trip getTripId() {
-        return trip;
-    }
-
-    public void setTripId(Trip trip) {
-        this.trip = trip;
-    }
-
-    public String getExpenseType() {
-        return expenseType;
-    }
-
-    public void setExpenseType(String expenseType) {
-        this.expenseType = expenseType;
-    }
-
-    public BigDecimal getValue() {
-        return value;
-    }
-
-    public void setValue(BigDecimal value) {
-        this.value = value;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public LocalDate getExpenseDate() {
-        return expenseDate;
-    }
-
-    public void setExpenseDate(LocalDate expenseDate) {
-        this.expenseDate = expenseDate;
-    }
-
-    public String getReceiptUrl() {
-        return receiptUrl;
-    }
-
-    public void setReceiptUrl(String receiptUrl) {
-        this.receiptUrl = receiptUrl;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
 }

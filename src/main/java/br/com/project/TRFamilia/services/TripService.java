@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.project.TRFamilia.dto.CreateTripDTO;
 import br.com.project.TRFamilia.enums.TripStatus;
+import br.com.project.TRFamilia.exceptions.ApiException;
 import br.com.project.TRFamilia.models.Driver;
 import br.com.project.TRFamilia.models.Trip;
 import br.com.project.TRFamilia.models.Truck;
@@ -30,9 +31,9 @@ public class TripService {
 		Optional<Driver> driver = driverRepository.findById(createTripDTO.getDriverId());
 		Optional<Truck> truck = truckRepository.findById(createTripDTO.getTruckId());
 
-		if(!truck.isPresent()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Truck not found");
+		if(!truck.isPresent()) throw new ApiException(404, "Truck not found", HttpStatus.NOT_FOUND);
 
-		if(!driver.isPresent()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Driver not found");
+		if(!driver.isPresent()) throw new ApiException(404, "Driver not found", HttpStatus.NOT_FOUND);
 
 		Trip trip = new Trip(
 			driver.get(),
@@ -66,7 +67,7 @@ public class TripService {
 
 		Driver driverData = driver.get();
 
-		driverData.setCurrentTripId(trip);
+		driverData.setTrip(trip);
 
 		driverRepository.save(driverData);
 

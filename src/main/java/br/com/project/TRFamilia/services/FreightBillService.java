@@ -5,6 +5,10 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+<<<<<<< HEAD
+=======
+import org.springframework.http.ResponseEntity;
+>>>>>>> 45402c9ebaafbaeb775fdea8800ea2a6a2cf73c3
 import org.springframework.stereotype.Service;
 
 import br.com.project.TRFamilia.dto.CreateFreightBillDTO;
@@ -26,9 +30,14 @@ public class FreightBillService {
         Trip trip = tripRepository.findById(dto.getTripId())
             .orElseThrow(() -> new ApiException(404, "Trip not found", HttpStatus.NOT_FOUND));
 
+<<<<<<< HEAD
         if (freightBillRepository.existsByTrip(trip)) {
             throw new ApiException(400, "Freight bill already exists for this trip", HttpStatus.BAD_REQUEST);
         }
+=======
+		if(!trip.isPresent()) throw new ApiException(404, "Trip not found", HttpStatus.NOT_FOUND);
+		
+>>>>>>> 45402c9ebaafbaeb775fdea8800ea2a6a2cf73c3
 
         FreightBill freightBill = new FreightBill(
             dto.getInitialValue(),

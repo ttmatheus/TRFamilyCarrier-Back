@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.project.TRFamilia.annotations.JustAdmin;
 import br.com.project.TRFamilia.dto.CreateDriverDTO;
 import br.com.project.TRFamilia.services.DriverService;
 import jakarta.validation.Valid;
@@ -19,6 +20,7 @@ public class DriverController {
 	private DriverService driverService;
 
 	@PostMapping("/create")
+	@JustAdmin
 	public ResponseEntity<?> createUser(@RequestBody @Valid CreateDriverDTO driver) {
 		return driverService.saveDriver(driver);
 	}

@@ -15,9 +15,13 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "trucks")
+@Getter
+@Setter
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Truck {
 	@Id
@@ -87,126 +91,6 @@ public class Truck {
         this.status = status;
         this.notes = notes;
         this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getLicensePlate() {
-        return licensePlate;
-    }
-
-    public void setLicensePlate(String licensePlate) {
-        this.licensePlate = licensePlate;
-    }
-
-    public BigDecimal getCurrentMileage() {
-        return currentMileage;
-    }
-
-    public void setCurrentMileage(BigDecimal currentMileage) {
-        this.currentMileage = currentMileage;
-    }
-
-    public String getBrand() {
-        return brand;
-    }
-
-    public void setBrand(String brand) {
-        this.brand = brand;
-    }
-
-    public String getModel() {
-        return model;
-    }
-
-    public void setModel(String model) {
-        this.model = model;
-    }
-
-    public Integer getYear() {
-        return year;
-    }
-
-    public void setYear(Integer year) {
-        this.year = year;
-    }
-
-    public String getVinNumber() {
-        return vinNumber;
-    }
-
-    public void setVinNumber(String vinNumber) {
-        this.vinNumber = vinNumber;
-    }
-
-    public String getFuelType() {
-        return fuelType;
-    }
-
-    public void setFuelType(String fuelType) {
-        this.fuelType = fuelType;
-    }
-
-    public BigDecimal getMaxLoadCapacity() {
-        return maxLoadCapacity;
-    }
-
-    public void setMaxLoadCapacity(BigDecimal maxLoadCapacity) {
-        this.maxLoadCapacity = maxLoadCapacity;
-    }
-
-    public LocalDate getMaintenanceDueDate() {
-        return maintenanceDueDate;
-    }
-
-    public void setMaintenanceDueDate(LocalDate maintenanceDueDate) {
-        this.maintenanceDueDate = maintenanceDueDate;
-    }
-
-    public LocalDate getInsuranceExpiration() {
-        return insuranceExpiration;
-    }
-
-    public void setInsuranceExpiration(LocalDate insuranceExpiration) {
-        this.insuranceExpiration = insuranceExpiration;
-    }
-
-    public TruckStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(TruckStatus status) {
-        this.status = status;
-    }
-
-    public String getNotes() {
-        return notes;
-    }
-
-    public void setNotes(String notes) {
-        this.notes = notes;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
 }

@@ -14,9 +14,13 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "users")
+@Getter
+@Setter
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,30 +57,4 @@ public class User {
 		this.userType = userType;
 		this.active = active;
 	}
-
-	public String getHashPassword() { return password; }
-
-	public void setHashPassword(String password) { this.password = password; }
-
-	public String getEmail() { return email; }
-
-	public void setEmail(String email) { this.email = email; }
-
-	public Long getId() { return id; }
-
-	public String getName() { return name; }
-
-	public void setName(String name) { this.name = name; }
-
-	public UserType getType() { return userType; }
-
-	public void setType(UserType type) { this.userType = type; }
-
-	public boolean isActive() { return active; }
-
-	public void setActive(boolean active) { this.active = active; }
-
-	public LocalDateTime getCreatedAt() { return createdAt; }
-
-	public LocalDateTime getUpdatedAt() { return updatedAt; }
 }

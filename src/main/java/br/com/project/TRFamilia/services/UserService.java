@@ -1,5 +1,6 @@
 package br.com.project.TRFamilia.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.project.TRFamilia.dto.CreateUserDTO;
 import br.com.project.TRFamilia.enums.UserType;
+import br.com.project.TRFamilia.exceptions.ApiException;
 import br.com.project.TRFamilia.models.User;
 import br.com.project.TRFamilia.repositories.UserRepository;
 
@@ -25,7 +27,7 @@ public class UserService {
 	public ResponseEntity<?> saveUser(CreateUserDTO userDto) {
 		Optional<User> emailExists = userRepository.findByEmail(userDto.getEmail());
 		if(emailExists.isPresent()) {
-			return ResponseEntity.status(HttpStatus.CONFLICT).body("Email already exists.");
+			throw new ApiException(409, "Email already exists.", HttpStatus.CONFLICT);
 		}
 		String cryptedPassword = passwordEncoder.encode(userDto.getPassword());
 
@@ -40,5 +42,15 @@ public class UserService {
 		userRepository.save(user);
 
 		return ResponseEntity.ok(user);
+	}
+
+	public List<User> getAdmins() {
+		return userRepository.findByUserType(UserType.admin);
+	}
+	public List<User> getDrivers() {
+		return userRepository.findByUserType(UserType.driver);
+	}
+	public List<User> getAllUsers() {
+		return userRepository.findAll();
 	}
 }
