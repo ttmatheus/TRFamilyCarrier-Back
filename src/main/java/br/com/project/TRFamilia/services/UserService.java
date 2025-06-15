@@ -22,7 +22,10 @@ public class UserService {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
-	public ResponseEntity<?> saveUser(CreateUserDTO userDto) {
+	public ResponseEntity<?> saveUser(CreateUserDTO userDto, String userId, String userEmail, String userRole) {
+		if(!userRole.equals("admin")) {
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You do not have permission to create users.");
+		}
 		Optional<User> emailExists = userRepository.findByEmail(userDto.getEmail());
 		if(emailExists.isPresent()) {
 			return ResponseEntity.status(HttpStatus.CONFLICT).body("Email already exists.");

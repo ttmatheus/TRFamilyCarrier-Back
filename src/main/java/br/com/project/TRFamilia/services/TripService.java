@@ -66,7 +66,7 @@ public class TripService {
 
 		Driver driverData = driver.get();
 
-		driverData.setCurrentTripId(trip);
+		driverData.setTrip(trip);
 
 		driverRepository.save(driverData);
 

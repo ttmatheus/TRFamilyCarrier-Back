@@ -27,6 +27,7 @@
 		<url/>
 	</scm>
 	<properties>
+		<lombok.version>1.18.38</lombok.version>
 		<java.version>21</java.version>
 	</properties>
 	<dependencies>
@@ -95,8 +96,12 @@
 			<artifactId>hibernate-types-60</artifactId>
 			<version>2.21.1</version>
 		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
-
 	<build>
 		<plugins>
 			<plugin>
@@ -108,8 +113,14 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.11.0</version>
 				<configuration>
-					<source>21</source>
-					<target>21</target>
+					<release>21</release>
+					<annotationProcessorPaths>
+						<path>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+							<version>1.18.36</version>
+						</path>
+					</annotationProcessorPaths>
 				</configuration>
 			</plugin>
 		</plugins>

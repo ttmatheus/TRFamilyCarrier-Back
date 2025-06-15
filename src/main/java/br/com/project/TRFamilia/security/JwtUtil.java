@@ -3,10 +3,13 @@ package br.com.project.TRFamilia.security;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import br.com.project.TRFamilia.dto.UserInfoDTO;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -25,9 +28,15 @@ public class JwtUtil {
 		return Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
 	}
 
-	public String generateToken(String email) {
+	public String generateToken(UserInfoDTO userInfo) {
 		return Jwts.builder()
-				.setSubject(email)
+				.setSubject(userInfo.getUserEmail())
+				.claim(
+					"user", Map.of(
+						"id", userInfo.getUserId(),
+						"role", userInfo.getRole()
+					)
+				)
 				.setIssuedAt(new Date())
 				.setExpiration(new Date(System.currentTimeMillis() + EXPPIRATION_TIME))
 				.signWith(getKey(), SignatureAlgorithm.HS256)
@@ -53,5 +62,19 @@ public class JwtUtil {
 		} catch(JwtException | IllegalArgumentException e) {
 			return false;
 		}
+	}
+
+	public Claims extractAllClaims(String token) {
+		return Jwts.parserBuilder()
+			.setSigningKey(getKey())
+			.build()
+			.parseClaimsJws(token)
+			.getBody();
+	}
+
+	@SuppressWarnings("unchecked")
+	public Map<String, Object> extractUserClaim(String token) {
+		Claims claims = extractAllClaims(token);
+		return claims.get("user", Map.class);
 	}
 }

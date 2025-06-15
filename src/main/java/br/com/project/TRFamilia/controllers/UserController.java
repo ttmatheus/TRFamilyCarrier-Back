@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.project.TRFamilia.dto.CreateUserDTO;
 import br.com.project.TRFamilia.services.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 @RestController
@@ -19,7 +20,10 @@ public class UserController {
 	private UserService userService;
 
 	@PostMapping("/create")
-	public ResponseEntity<?> createUser(@RequestBody @Valid CreateUserDTO user) {
-		return userService.saveUser(user);
+	public ResponseEntity<?> createUser(@RequestBody @Valid CreateUserDTO user, HttpServletRequest request) {
+		String userId = (String) request.getAttribute("userId");
+        String userEmail = (String) request.getAttribute("userEmail");
+		String userRole = (String) request.getAttribute("userRole");
+		return userService.saveUser(user, userId, userEmail, userRole);
 	}
 }
