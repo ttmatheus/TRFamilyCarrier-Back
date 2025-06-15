@@ -27,4 +27,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleSecurityException(SecurityException ex) {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ex.getMessage());
     }
+
+	@ExceptionHandler(ApiException.class)
+	public ResponseEntity<Map<String, Object>> handleApiException(ApiException ex) {
+		Map<String, Object> errorBody = new HashMap<>();
+		errorBody.put("code", ex.getCode());
+		errorBody.put("error", ex.getError());
+		return ResponseEntity.status(ex.getStatus()).body(errorBody);
+	}
 }

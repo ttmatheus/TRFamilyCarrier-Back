@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.project.TRFamilia.dto.CreateUserDTO;
 import br.com.project.TRFamilia.enums.UserType;
+import br.com.project.TRFamilia.exceptions.ApiException;
 import br.com.project.TRFamilia.models.User;
 import br.com.project.TRFamilia.repositories.UserRepository;
 
@@ -23,13 +24,10 @@ public class UserService {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
-	public ResponseEntity<?> saveUser(CreateUserDTO userDto, String userId, String userEmail, String userRole) {
-		if(!userRole.equals("admin")) {
-			return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You do not have permission to create users.");
-		}
+	public ResponseEntity<?> saveUser(CreateUserDTO userDto) {
 		Optional<User> emailExists = userRepository.findByEmail(userDto.getEmail());
 		if(emailExists.isPresent()) {
-			return ResponseEntity.status(HttpStatus.CONFLICT).body("Email already exists.");
+			throw new ApiException(409, "Email already exists.", HttpStatus.CONFLICT);
 		}
 		String cryptedPassword = passwordEncoder.encode(userDto.getPassword());
 

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.project.TRFamilia.annotations.JustAdmin;
 import br.com.project.TRFamilia.dto.CreateFreightBillDTO;
 import br.com.project.TRFamilia.services.FreightBillService;
 import jakarta.validation.Valid;
@@ -17,6 +18,7 @@ public class FreightBillController {
 	@Autowired private FreightBillService freightBillService;
 
 	@PostMapping("/create")
+	@JustAdmin
 	public ResponseEntity<?> createFreightBill(@RequestBody @Valid CreateFreightBillDTO createFreightBillDTO) {
 		return freightBillService.saveFreightBill(createFreightBillDTO);
 	}

@@ -13,6 +13,7 @@ import br.com.project.TRFamilia.dto.AuthInfoDto;
 import br.com.project.TRFamilia.dto.LoginDTO;
 import br.com.project.TRFamilia.dto.LoginResponseDTO;
 import br.com.project.TRFamilia.dto.UserInfoDTO;
+import br.com.project.TRFamilia.exceptions.ApiException;
 import br.com.project.TRFamilia.models.User;
 import br.com.project.TRFamilia.repositories.UserRepository;
 import br.com.project.TRFamilia.security.JwtUtil;
@@ -48,7 +49,7 @@ public class AuthService {
 
 			return ResponseEntity.ok(new AuthInfoDto(email, role, userId));
 		} else {
-			return ResponseEntity.status(401).body("Invalid or expired token.");
+			throw new ApiException(401, "Invalid or expired token.", HttpStatus.UNAUTHORIZED);
 		}
 	}
 
@@ -62,7 +63,7 @@ public class AuthService {
 
 			return ResponseEntity.ok(response);
 		} else {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password.");
+			throw new ApiException(401, "Invalid email or password.", HttpStatus.UNAUTHORIZED);
 		}
 	}
 }

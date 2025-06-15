@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.project.TRFamilia.dto.CreateDriverDTO;
 import br.com.project.TRFamilia.enums.DriverStatus;
+import br.com.project.TRFamilia.exceptions.ApiException;
 import br.com.project.TRFamilia.models.Driver;
 import br.com.project.TRFamilia.models.Truck;
 import br.com.project.TRFamilia.models.User;
@@ -30,9 +31,9 @@ public class DriverService {
 		Optional<User> user = userRepository.findById(createDriverDTO.getUser());
 		Optional<Truck> truck = truckRepository.findById(createDriverDTO.getTrucks());
 
-		if(!user.isPresent()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+		if(!user.isPresent()) throw new ApiException(404, "User not found", HttpStatus.NOT_FOUND);
 
-		if(!truck.isPresent()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Truck not found");
+		if(!truck.isPresent()) throw new ApiException(404, "Truck not found", HttpStatus.NOT_FOUND);
 
 		Driver driver = new Driver(
 			user.get(),
