@@ -48,9 +48,8 @@ public class Notification {
     public Notification() {
     }
 
-    public Notification(Long id, User user, String title, String message, String notificationType,
+    public Notification(User user, String title, String message, String notificationType,
                         Boolean isRead, LocalDateTime readAt, LocalDateTime createdAt) {
-        this.id = id;
         this.user = user;
         this.title = title;
         this.message = message;
