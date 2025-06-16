@@ -6,7 +6,6 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import br.com.project.TRFamilia.dto.CreateFreightBillDTO;
@@ -22,48 +21,59 @@ import br.com.project.TRFamilia.repositories.TripRepository;
 
 @Service
 public class FreightBillService {
-	
-	@Autowired private FreightBillRepository freightBillRepository;
 
-	@Autowired private TripRepository tripRepository;
+    @Autowired private FreightBillRepository freightBillRepository;
 
 	@Autowired private DriverRepository driverRepository;
 
-	public ResponseEntity<?> saveFreightBill(CreateFreightBillDTO createFreightBillDTO) {
+    @Autowired private TripRepository tripRepository;
 
-		Optional<Trip> trip = tripRepository.findById(createFreightBillDTO.getTripId());
 
-		if(!trip.isPresent()) throw new ApiException(404, "Trip not found", HttpStatus.NOT_FOUND);
-		
+    public FreightBill saveFreightBill(CreateFreightBillDTO dto) {
+        Trip trip = tripRepository.findById(dto.getTripId())
+            .orElseThrow(() -> new ApiException(404, "Trip not found", HttpStatus.NOT_FOUND));
 
-		FreightBill freightBill = new FreightBill(
-			createFreightBillDTO.getInitialValue(),
-			createFreightBillDTO.getRemainingValue(),
-			createFreightBillDTO.getTruckExpensesTotal(),
-			createFreightBillDTO.getTripExpensesTotal(),
-			createFreightBillDTO.getDriverPaymentValue(),
-			createFreightBillDTO.getCompanyRevenue(),
-			FreightBillStatus.pending,
-			createFreightBillDTO.getNotes(),
-			LocalDateTime.now(),
-			LocalDateTime.now(),
-			trip.get()
-		);
+        if (freightBillRepository.existsByTrip(trip)) {
+            throw new ApiException(400, "Freight bill already exists for this trip", HttpStatus.BAD_REQUEST);
+        }
 
-		freightBill.setTrip(trip.get());
+        FreightBill freightBill = new FreightBill(
+            dto.getInitialValue(),
+            dto.getRemainingValue(),
+            dto.getTruckExpensesTotal(),
+            dto.getTripExpensesTotal(),
+            dto.getDriverPaymentValue(),
+            dto.getCompanyRevenue(),
+            FreightBillStatus.pending,
+            dto.getNotes(),
+            LocalDateTime.now(),
+            LocalDateTime.now(),
+            trip
+        );
 
-		freightBillRepository.save(freightBill);
+        trip.setFreightBill(freightBill);
 
-		Trip tripData = trip.get();
+        tripRepository.save(trip);
+        return freightBillRepository.save(freightBill);
+    }
 
-		tripData.setFreightBill(freightBill);
+    public FreightBill updateFreightBill(Long id, CreateFreightBillDTO dto) {
+        FreightBill freightBill = freightBillRepository.findById(id)
+            .orElseThrow(() -> new ApiException(404, "Freight bill not found", HttpStatus.NOT_FOUND));
 
-		tripRepository.save(tripData);
+        freightBill.setInitialValue(dto.getInitialValue());
+        freightBill.setRemainingValue(dto.getRemainingValue());
+        freightBill.setTruckExpensesTotal(dto.getTruckExpensesTotal());
+        freightBill.setTripExpensesTotal(dto.getTripExpensesTotal());
+        freightBill.setDriverPaymentValue(dto.getDriverPaymentValue());
+        freightBill.setCompanyRevenue(dto.getCompanyRevenue());
+        freightBill.setNotes(dto.getNotes());
+        freightBill.setUpdatedAt(LocalDateTime.now());
 
-		return ResponseEntity.ok().body(freightBill);
-	}
+        return freightBillRepository.save(freightBill);
+    }
 
-	public List<FreightBillDTO> getFreightBillByUserId(Long id) {
+    public List<FreightBillDTO> getFreightBillByUserId(Long id) {
 		Optional<Driver> driver = driverRepository.findByUser_id(id);
 		if(!driver.isPresent()) {
 			throw new ApiException(404, "Driver not found for user with ID: " + id, HttpStatus.NOT_FOUND);
@@ -85,4 +95,16 @@ public class FreightBillService {
 
 		return freightBillDTOs;
 	}
+
+    public void deleteFreightBill(Long id) {
+        if (!freightBillRepository.existsById(id)) {
+            throw new ApiException(404, "Freight bill not found", HttpStatus.NOT_FOUND);
+        }
+        freightBillRepository.deleteById(id);
+    }
+
+    public FreightBill getFreightBillById(Long id) {
+        return freightBillRepository.findById(id)
+            .orElseThrow(() -> new ApiException(404, "Freight bill not found", HttpStatus.NOT_FOUND));
+    }
 }
