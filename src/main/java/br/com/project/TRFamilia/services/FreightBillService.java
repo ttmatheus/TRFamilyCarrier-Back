@@ -85,7 +85,7 @@ public class FreightBillService {
 
 		List<FreightBill> freightBills = freightBillRepository.findByTripId_Id(trip.get().getId());
 
-		if(!freightBills.isEmpty()) {
+		if(freightBills.isEmpty()) {
 			throw new ApiException(404, "Freight Bill not found for trip with ID: " + trip.get().getId(), HttpStatus.NOT_FOUND);
 		}
 
