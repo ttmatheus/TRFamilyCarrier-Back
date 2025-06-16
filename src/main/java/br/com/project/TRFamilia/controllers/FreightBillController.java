@@ -20,7 +20,7 @@ import br.com.project.TRFamilia.services.FreightBillService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/freight-bill")
+@RequestMapping("freightbill")
 public class FreightBillController {
     @Autowired private FreightBillService freightBillService;
 
