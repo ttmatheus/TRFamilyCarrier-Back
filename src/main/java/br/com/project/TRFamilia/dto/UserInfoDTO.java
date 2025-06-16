@@ -7,10 +7,13 @@ public class UserInfoDTO {
 
 	private final String userEmail;
 
-	public UserInfoDTO(String role, Long userId, String userEmail) {
+	private final String userName;
+
+	public UserInfoDTO(String role, Long userId, String userEmail, String userName) {
 		this.userRole = role;
 		this.userId = userId;
 		this.userEmail = userEmail;
+		this.userName = userName;
 	}
 
 	public String getRole() {
@@ -22,4 +25,8 @@ public class UserInfoDTO {
 	public String getUserEmail() {
 		return userEmail;
 	}
+	public String getUserName() {
+		return userName;
+	}
 }
+

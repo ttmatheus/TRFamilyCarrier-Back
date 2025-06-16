@@ -34,7 +34,8 @@ public class JwtUtil {
 				.claim(
 					"user", Map.of(
 						"id", userInfo.getUserId(),
-						"role", userInfo.getRole()
+						"role", userInfo.getRole(),
+						"name", userInfo.getUserName()
 					)
 				)
 				.setIssuedAt(new Date())

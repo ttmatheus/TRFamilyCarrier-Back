@@ -28,6 +28,11 @@ public class RateLimitingFilter implements Filter {
 			throws IOException, ServletException {
 		
 		HttpServletRequest req = (HttpServletRequest) request;
+
+		if ("OPTIONS".equalsIgnoreCase(req.getMethod())) {
+			chain.doFilter(request, response);
+			return;
+		}
 		String ipAddress = req.getRemoteAddr();
 
 		Bucket bucket = buckets.computeIfAbsent(ipAddress, this::newBucket);
@@ -44,7 +49,7 @@ public class RateLimitingFilter implements Filter {
 	@SuppressWarnings("unused")
 	private Bucket newBucket(String key) {
 		return Bucket.builder()
-				.addLimit(Bandwidth.classic(10, Refill.greedy(10, Duration.ofMinutes(1))))
+				.addLimit(Bandwidth.classic(10, Refill.greedy(10, Duration.ofSeconds(10))))
 				.build();
 	}
 }

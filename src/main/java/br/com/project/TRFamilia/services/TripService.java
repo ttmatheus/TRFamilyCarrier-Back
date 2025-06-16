@@ -1,6 +1,7 @@
 package br.com.project.TRFamilia.services;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import br.com.project.TRFamilia.dto.CreateTripDTO;
+import br.com.project.TRFamilia.dto.TripDTO;
 import br.com.project.TRFamilia.enums.TripStatus;
 import br.com.project.TRFamilia.exceptions.ApiException;
 import br.com.project.TRFamilia.models.Driver;
@@ -72,5 +74,19 @@ public class TripService {
 		driverRepository.save(driverData);
 
 		return ResponseEntity.ok().body(trip);
+	}
+
+	public List<TripDTO> getTripByUserId(Long id) {
+		Optional<Driver> driver = driverRepository.findByUser_id(id);
+		if(!driver.isPresent()) {
+			throw new ApiException(404, "Driver not found for user with ID: " + id, HttpStatus.NOT_FOUND);
+		}
+		List<Trip> trips = tripRepository.findByDriverId_Id(driver.get().getId());
+		if (trips.isEmpty()) {
+			throw new ApiException(404, "No trips found for user with ID: " + id, HttpStatus.NOT_FOUND);
+		}
+		return trips.stream()
+                .map(TripDTO::new)
+                .toList();
 	}
 }

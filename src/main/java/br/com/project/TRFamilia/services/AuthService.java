@@ -47,7 +47,12 @@ public class AuthService {
 				role = str;
 			}
 
-			return ResponseEntity.ok(new AuthInfoDto(email, role, userId));
+			String name = null;
+			if (userClaims.get("name") instanceof String str) {
+				name = str;
+			}
+
+			return ResponseEntity.ok(new AuthInfoDto(email, role, userId, name));
 		} else {
 			throw new ApiException(401, "Invalid or expired token.", HttpStatus.UNAUTHORIZED);
 		}
@@ -58,7 +63,7 @@ public class AuthService {
 		if (userOpt.isPresent() && passwordEncoder.matches(user.getPassword(), userOpt.get().getPassword())) {
 			User userFinded = userOpt.get();
 			
-			UserInfoDTO userInfo = new UserInfoDTO(userFinded.getUserType().toString(), userFinded.getId(), userFinded.getEmail());
+			UserInfoDTO userInfo = new UserInfoDTO(userFinded.getUserType().toString(), userFinded.getId(), userFinded.getEmail(), userFinded.getName());
 			LoginResponseDTO response = new LoginResponseDTO(jwtUtil.generateToken(userInfo), userInfo);
 
 			return ResponseEntity.ok(response);
