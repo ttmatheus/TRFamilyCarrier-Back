@@ -1,6 +1,7 @@
 package br.com.project.TRFamilia.services;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -43,6 +44,11 @@ public class ExpenseService {
         Expense expense = expenseRepository.findById(id)
                 .orElseThrow(() -> new ApiException(404, "Expense not found", HttpStatus.NOT_FOUND));
         return expense;
+    }
+
+    public List<Expense> getAllExpenses() {
+        List<Expense> expenses = expenseRepository.findAll();
+        return expenses;
     }
 
     public Expense updateExpense(Long id, CreateExpenseDTO dto) {
