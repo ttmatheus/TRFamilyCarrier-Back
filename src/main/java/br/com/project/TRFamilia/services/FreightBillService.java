@@ -51,11 +51,16 @@ public class FreightBillService {
             trip
         );
 
-        trip.setFreightBill(freightBill);
+        // Salvar o FreightBill antes de relacioná-lo à Trip
+        freightBillRepository.save(freightBill);
 
-        tripRepository.save(trip);
-        return freightBillRepository.save(freightBill);
+        // Relacionar e salvar a Trip, se necessário (opcional, se bidirecional)
+        trip.setFreightBill(freightBill);
+        tripRepository.save(trip); // Opcional, só se precisar manter a relação bidirecional salva
+
+        return freightBill;
     }
+
 
     public FreightBill updateFreightBill(Long id, CreateFreightBillDTO dto) {
         FreightBill freightBill = freightBillRepository.findById(id)
@@ -74,27 +79,34 @@ public class FreightBillService {
     }
 
     public List<ResponseFreightBillDTO> getFreightBillByUserId(Long id) {
-		Optional<Driver> driver = driverRepository.findByUser_id(id);
-		if(!driver.isPresent()) {
-			throw new ApiException(404, "Driver not found for user with ID: " + id, HttpStatus.NOT_FOUND);
-		}
-		Optional<Trip> trip = tripRepository.findOneByDriverId_Id(driver.get().getId());
-		if(!trip.isPresent()) {
-			throw new ApiException(404, "Trip not found for user with ID: " + id, HttpStatus.NOT_FOUND);
-		}
+        // Buscar o motorista pelo ID do usuário
+        Optional<Driver> driver = driverRepository.findByUser_id(id);
+        if (!driver.isPresent()) {
+            throw new ApiException(404, "Driver not found for user with ID: " + id, HttpStatus.NOT_FOUND);
+        }
 
-		List<FreightBill> freightBills = freightBillRepository.findByTripId_Id(trip.get().getId());
+        // Buscar todas as viagens associadas a esse motorista
+        List<Trip> trips = tripRepository.findByDriverId_Id(driver.get().getId());
+        if (trips.isEmpty()) {
+            throw new ApiException(404, "Trips not found for user with ID: " + id, HttpStatus.NOT_FOUND);
+        }
 
-		if(freightBills.isEmpty()) {
-			throw new ApiException(404, "Freight Bill not found for trip with ID: " + trip.get().getId(), HttpStatus.NOT_FOUND);
-		}
+        // Para cada viagem, buscar os FreightBills e achatar a lista
+        List<FreightBill> freightBills = trips.stream()
+            .flatMap(trip -> freightBillRepository.findByTripId_Id(trip.getId()).stream())
+            .toList();
 
-		List<ResponseFreightBillDTO> freightBillDTOs = freightBills.stream()
-			.map(ResponseFreightBillDTO::new)
-			.toList();
+        if (freightBills.isEmpty()) {
+            throw new ApiException(404, "Freight Bill not found for user with ID: " + id, HttpStatus.NOT_FOUND);
+        }
 
-		return freightBillDTOs;
-	}
+        // Mapear para DTOs
+        List<ResponseFreightBillDTO> freightBillDTOs = freightBills.stream()
+            .map(ResponseFreightBillDTO::new)
+            .toList();
+
+        return freightBillDTOs;
+    }
 
     public List<ResponseFreightBillDTO> getAllFreightBills() {
         List<FreightBill> freightBills = freightBillRepository.findAll();

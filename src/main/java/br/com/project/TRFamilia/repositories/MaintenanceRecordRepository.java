@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import br.com.project.TRFamilia.models.MaintenanceRecord;
 
 @Repository
-public interface MaintenceRecordRepository extends JpaRepository<MaintenanceRecord, Long>{
+public interface MaintenanceRecordRepository extends JpaRepository<MaintenanceRecord, Long>{
 	
 }

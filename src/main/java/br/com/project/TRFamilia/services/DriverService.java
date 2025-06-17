@@ -10,7 +10,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import br.com.project.TRFamilia.dto.CreateDriverDTO;
+import br.com.project.TRFamilia.dto.DriverResponseDTO;
 import br.com.project.TRFamilia.dto.ResponseDriverDTO;
+import br.com.project.TRFamilia.dto.ResponseTruckDTO;
+import br.com.project.TRFamilia.dto.UserResponseDTO;
 import br.com.project.TRFamilia.enums.DriverStatus;
 import br.com.project.TRFamilia.exceptions.ApiException;
 import br.com.project.TRFamilia.models.Driver;
@@ -19,6 +22,7 @@ import br.com.project.TRFamilia.models.User;
 import br.com.project.TRFamilia.repositories.DriverRepository;
 import br.com.project.TRFamilia.repositories.TruckRepository;
 import br.com.project.TRFamilia.repositories.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class DriverService {
@@ -69,4 +73,37 @@ public class DriverService {
 			.map(ResponseDriverDTO::new)
 			.toList();
 	}
+
+	public DriverResponseDTO getDriverByUserId(Long userId) {
+        // Assuming @EntityGraph in DriverRepository ensures user and truck are eagerly fetched.
+        // If not, use Hibernate.initialize(driver.getUser()); and Hibernate.initialize(driver.getTruck()); here.
+        Driver driver = driverRepository.findByUser_id(userId)
+            .orElseThrow(() -> new EntityNotFoundException("Motorista não encontrado para o User ID: " + userId));
+
+        // --- MAP User entity to UserResponseDTO ---
+        UserResponseDTO userResponseDTO = null;
+        if (driver.getUser() != null) {
+            userResponseDTO = new UserResponseDTO();
+            userResponseDTO.setId(driver.getUser().getId());
+            userResponseDTO.setName(driver.getUser().getName());
+            userResponseDTO.setEmail(driver.getUser().getEmail()); // Assuming User entity has an 'email' field
+            // Add any other fields you want to include from User
+        }
+
+        // --- MAP Truck entity to ResponseTruckDTO ---
+        ResponseTruckDTO responseTruckDTO = null;
+        if (driver.getTruck() != null) {
+            responseTruckDTO = new ResponseTruckDTO(driver.getTruck());
+        }
+
+        // Now pass the DTOs to the DriverResponseDTO constructor
+        return new DriverResponseDTO(
+            driver.getId(),
+            userResponseDTO, 
+            responseTruckDTO,
+            driver.getLicenseNumber(),
+            driver.getLicenseExpiration(),
+            driver.getStats()
+        );
+    }
 }

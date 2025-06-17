@@ -41,7 +41,8 @@ public class SecurityConfig {
                 "/trip/**",
                 "/freightbill/**",
                 "/notification/**",
-                "/expense/**").permitAll()
+                "/expense/**",
+                "/maintenance-records/**").permitAll()
                 .anyRequest().authenticated()
             )
             .addFilterBefore(new JwtAuthenticationFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
