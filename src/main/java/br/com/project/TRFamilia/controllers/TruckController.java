@@ -42,4 +42,10 @@ public class TruckController {
 	public List<ResponseTruckDTO> getAllTrucks() {
 		return truckService.getAllTrucks();
 	}
+
+	@GetMapping("/trucks/notHaveDrive")
+	@JustAdmin
+	public List<ResponseTruckDTO> getTruckWithNotHaveDrive() {
+		return truckService.getTruckWithNotHaveDrive();
+	}
 }

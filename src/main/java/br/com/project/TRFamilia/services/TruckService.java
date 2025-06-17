@@ -3,6 +3,7 @@ package br.com.project.TRFamilia.services;
 import java.beans.FeatureDescriptor;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import br.com.project.TRFamilia.dto.UpdateTruckDTO;
 import br.com.project.TRFamilia.enums.TruckStatus;
 import br.com.project.TRFamilia.exceptions.ApiException;
 import br.com.project.TRFamilia.models.Truck;
+import br.com.project.TRFamilia.repositories.DriverRepository;
 import br.com.project.TRFamilia.repositories.TruckRepository;
 
 import org.springframework.beans.BeanUtils;
@@ -25,6 +27,8 @@ import org.springframework.beans.BeanWrapperImpl;
 public class TruckService {
 
 	@Autowired private TruckRepository truckRepository;
+
+	@Autowired private DriverRepository driverRepository;
 
 	public Truck saveTruck(CreateTruckDTO createTruckDTO) {
 		Truck truck = new Truck(
@@ -82,6 +86,27 @@ public class TruckService {
 		}
 
 		return trucks.stream()
+			.map(ResponseTruckDTO::new)
+			.toList();
+	}
+
+	public List<ResponseTruckDTO> getTruckWithNotHaveDrive() {
+		List<Truck> allTrucks = truckRepository.findAll();
+		if (allTrucks.isEmpty()) {
+			throw new ApiException(404, "No trucks found", HttpStatus.NOT_FOUND);
+		}
+
+
+		List<Long> usedTruckIds = driverRepository.findAll().stream()
+			.map(driver -> {
+				Truck truck = driver.getTruck();
+				return truck != null ? truck.getId() : null;
+			})
+			.filter(Objects::nonNull)
+			.toList();
+
+		return allTrucks.stream()
+			.filter(truck -> !usedTruckIds.contains(truck.getId()))
 			.map(ResponseTruckDTO::new)
 			.toList();
 	}
