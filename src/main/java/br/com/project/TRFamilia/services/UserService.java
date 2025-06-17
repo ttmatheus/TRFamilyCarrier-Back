@@ -42,7 +42,7 @@ public class UserService {
 			userDto.getName(),
 			userDto.getEmail(),
 			cryptedPassword,
-			UserType.driver,
+			userDto.getUserType() != null ? userDto.getUserType() : UserType.driver,
 			userDto.isActive() || true
 		);
 

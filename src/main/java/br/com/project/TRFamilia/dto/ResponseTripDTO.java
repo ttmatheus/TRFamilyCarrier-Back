@@ -25,32 +25,32 @@ class TruckDTO {
 public class ResponseTripDTO {
 	private Long id;
 	private String destination;
-	private String departure_time;
+	private String departureTime;
 	private String status;
-	private BigDecimal cargo_weight;
+	private BigDecimal cargoWeight;
 	private String origin;
-	private String arrival_time;
-	private String receiver_name;
-	private String receiver_document;
-	private String cargo_description;
-	private Optional<Long> driver_id;
-	private Optional<Long> truck_id;
+	private String arrivalTime;
+	private String receiverName;
+	private String receiverDocument;
+	private String cargoDescription;
+	private Optional<Long> driverId;
+	private Optional<Long> truckId;
 	private Optional<DriverDTO> driver;
 	private Optional<TruckDTO> truck;
 
 	public ResponseTripDTO(Trip trip) {
 		this.id = trip.getId();
 		this.destination = trip.getDestination();
-		this.departure_time = trip.getDepartureTime() != null ? trip.getDepartureTime().toString() : "";
+		this.departureTime = trip.getDepartureTime() != null ? trip.getDepartureTime().toString() : "";
 		this.status = trip.getStatus() != null ? trip.getStatus().toString() : TripStatus.in_progress.toString();
-		this.cargo_weight = trip.getCargoWeight();
+		this.cargoWeight = trip.getCargoWeight();
 		this.origin = trip.getOrigin();
-		this.arrival_time = trip.getArrivalTime() != null ? trip.getArrivalTime().toString() : "";
-		this.receiver_name = trip.getReceiverName();
-		this.receiver_document = trip.getReceiverDocument();
-		this.cargo_description = trip.getCargoDescription();
-		this.driver_id = trip.getDriver() != null ? Optional.of(trip.getDriver().getId()) : Optional.empty();
-		this.truck_id = trip.getTruck() != null ? Optional.of(trip.getTruck().getId()) : Optional.empty();
+		this.arrivalTime = trip.getArrivalTime() != null ? trip.getArrivalTime().toString() : "";
+		this.receiverName = trip.getReceiverName();
+		this.receiverDocument = trip.getReceiverDocument();
+		this.cargoDescription = trip.getCargoDescription();
+		this.driverId = trip.getDriver() != null ? Optional.of(trip.getDriver().getId()) : Optional.empty();
+		this.truckId = trip.getTruck() != null ? Optional.of(trip.getTruck().getId()) : Optional.empty();
 		this.driver = trip.getDriver() != null ? Optional.of(new DriverDTO()) : Optional.empty();
 		this.truck = trip.getTruck() != null ? Optional.of(new TruckDTO()) : Optional.empty();
 		if (trip.getDriver() != null) {

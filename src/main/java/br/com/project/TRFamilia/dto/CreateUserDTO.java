@@ -1,5 +1,6 @@
 package br.com.project.TRFamilia.dto;
 
+import br.com.project.TRFamilia.enums.UserType;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -30,12 +31,15 @@ public class CreateUserDTO {
 
 	private boolean active;
 
+	private UserType userType;
+
 	public CreateUserDTO() {}
 
-	public CreateUserDTO(String name, String email, String password, boolean active) {
+	public CreateUserDTO(String name, String email, String password, boolean active, UserType userType) {
 		this.name = name;
 		this.email = email;
 		this.password = password;
 		this.active = active;
+		this.userType = userType;
 	}
 }

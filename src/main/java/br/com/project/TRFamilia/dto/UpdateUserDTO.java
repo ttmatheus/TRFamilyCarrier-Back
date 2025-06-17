@@ -1,5 +1,6 @@
 package br.com.project.TRFamilia.dto;
 
+import br.com.project.TRFamilia.enums.UserType;
 import jakarta.validation.constraints.Email;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,4 +16,6 @@ public class UpdateUserDTO {
 	private String email;
 
 	private boolean active;
+
+	private UserType userType;
 }
