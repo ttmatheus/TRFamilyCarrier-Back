@@ -34,7 +34,7 @@ public class JwtUtil {
 				.claim(
 					"user", Map.of(
 						"id", userInfo.getUserId(),
-						"role", userInfo.getUserType(),
+						"userType", userInfo.getUserType(),
 						"name", userInfo.getUserName()
 					)
 				)

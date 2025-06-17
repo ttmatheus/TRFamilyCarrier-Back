@@ -44,19 +44,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             Map<String, Object> claims = jwtUtil.extractUserClaim(token);
 
             String userEmail = (String) claims.get("email");
-            String userRole = (String) claims.get("role");
+            String userType = (String) claims.get("userType");
 			Integer userId = (Integer) claims.get("id");
 
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                     userEmail,
                     null,
-                    Collections.singletonList(new SimpleGrantedAuthority(userRole))
+                    Collections.singletonList(new SimpleGrantedAuthority(userType))
             );
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
             request.setAttribute("userEmail", userEmail);
-            request.setAttribute("userRole", userRole);
+            request.setAttribute("userType", userType);
 			request.setAttribute("userId", userId);
 
         } catch (JwtException | IllegalArgumentException e) {

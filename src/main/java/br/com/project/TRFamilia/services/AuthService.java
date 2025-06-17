@@ -43,7 +43,7 @@ public class AuthService {
 			}
 
 			String role = null;
-			if (userClaims.get("role") instanceof String str) {
+			if (userClaims.get("userType") instanceof String str) {
 				role = str;
 			}
 

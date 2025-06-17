@@ -26,9 +26,9 @@ public class JustAdminAspect {
         }
 
         HttpServletRequest request = attrs.getRequest();
-        String userRole = (String) request.getAttribute("userRole");
+        String userType = (String) request.getAttribute("userType");
 
-        if (userRole == null || !userRole.equals("admin")) {
+        if (userType== null || !userType.equals("admin")) {
             throw new SecurityException("Access Denied: Only administrators can access this route.");
         }
     }
