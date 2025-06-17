@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.project.TRFamilia.annotations.JustAdmin;
 import br.com.project.TRFamilia.dto.CreateFreightBillDTO;
-import br.com.project.TRFamilia.dto.FreightBillDTO;
+import br.com.project.TRFamilia.dto.ResponseFreightBillDTO;
 import br.com.project.TRFamilia.models.FreightBill;
 import br.com.project.TRFamilia.services.FreightBillService;
 import jakarta.validation.Valid;
@@ -43,8 +43,13 @@ public class FreightBillController {
     }
 
 	@GetMapping
-	public List<FreightBillDTO> getTrip(
+	public List<ResponseFreightBillDTO> getTrip(
 		@RequestParam(name = "user_id", required = true) Long userId) {
 		return freightBillService.getFreightBillByUserId(userId);
 	}
+
+    @GetMapping("/freightbills")
+    public List<ResponseFreightBillDTO> getAllFreightBills() {
+        return freightBillService.getAllFreightBills();
+    }
 }

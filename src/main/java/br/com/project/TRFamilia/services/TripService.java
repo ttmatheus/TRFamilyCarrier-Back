@@ -1,5 +1,6 @@
 package br.com.project.TRFamilia.services;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -8,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import br.com.project.TRFamilia.services.GeocodingService.Location;
 
 import br.com.project.TRFamilia.dto.CreateTripDTO;
+import br.com.project.TRFamilia.dto.ResponseTripDTO;
 import br.com.project.TRFamilia.dto.TripDTO;
 import br.com.project.TRFamilia.enums.TripStatus;
 import br.com.project.TRFamilia.exceptions.ApiException;
@@ -28,6 +31,8 @@ public class TripService {
 
 	@Autowired private TruckRepository truckRepository;
 
+	@Autowired private GeocodingService geocodingService;
+
 	public ResponseEntity<?> saveTrip(CreateTripDTO createTripDTO) {
 		
 		Optional<Driver> driver = driverRepository.findById(createTripDTO.getDriverId());
@@ -37,6 +42,9 @@ public class TripService {
 
 		if(!driver.isPresent()) throw new ApiException(404, "Driver not found", HttpStatus.NOT_FOUND);
 
+		Location origin = geocodingService.getCoordinates(createTripDTO.getOrigin());
+		Location destination = geocodingService.getCoordinates(createTripDTO.getDestination());
+
 		Trip trip = new Trip(
 			driver.get(),
 			truck.get(),
@@ -45,11 +53,11 @@ public class TripService {
 			createTripDTO.getReturnTime(),
 			createTripDTO.getOrigin(),
 			createTripDTO.getDestination(),
-			createTripDTO.getOriginLatitude(),
-			createTripDTO.getOriginLongitude(),
-			createTripDTO.getDestinationLatitude(),
-			createTripDTO.getDestinationLongitude(),
-			createTripDTO.getInitialMileage(),
+			origin.lat,
+			origin.lng,
+			destination.lat,
+			destination.lng,
+			BigDecimal.ZERO,
 			createTripDTO.getFinalMileage(),
 			createTripDTO.getCargoDescription(),
 			createTripDTO.getCargoWeight(),
@@ -88,5 +96,15 @@ public class TripService {
 		return trips.stream()
                 .map(TripDTO::new)
                 .toList();
+	}
+
+	public List<ResponseTripDTO> getAllTrips() {
+		List<Trip> trips = tripRepository.findAll();
+		if (trips.isEmpty()) {
+			throw new ApiException(404, "No trips found", HttpStatus.NOT_FOUND);
+		}
+		return trips.stream()
+				.map(ResponseTripDTO::new)
+				.toList();
 	}
 }

@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import br.com.project.TRFamilia.dto.CreateFreightBillDTO;
-import br.com.project.TRFamilia.dto.FreightBillDTO;
+import br.com.project.TRFamilia.dto.ResponseFreightBillDTO;
 import br.com.project.TRFamilia.enums.FreightBillStatus;
 import br.com.project.TRFamilia.exceptions.ApiException;
 import br.com.project.TRFamilia.models.Driver;
@@ -73,7 +73,7 @@ public class FreightBillService {
         return freightBillRepository.save(freightBill);
     }
 
-    public List<FreightBillDTO> getFreightBillByUserId(Long id) {
+    public List<ResponseFreightBillDTO> getFreightBillByUserId(Long id) {
 		Optional<Driver> driver = driverRepository.findByUser_id(id);
 		if(!driver.isPresent()) {
 			throw new ApiException(404, "Driver not found for user with ID: " + id, HttpStatus.NOT_FOUND);
@@ -89,12 +89,19 @@ public class FreightBillService {
 			throw new ApiException(404, "Freight Bill not found for trip with ID: " + trip.get().getId(), HttpStatus.NOT_FOUND);
 		}
 
-		List<FreightBillDTO> freightBillDTOs = freightBills.stream()
-			.map(FreightBillDTO::new)
+		List<ResponseFreightBillDTO> freightBillDTOs = freightBills.stream()
+			.map(ResponseFreightBillDTO::new)
 			.toList();
 
 		return freightBillDTOs;
 	}
+
+    public List<ResponseFreightBillDTO> getAllFreightBills() {
+        List<FreightBill> freightBills = freightBillRepository.findAll();
+        return freightBills.stream()
+            .map(ResponseFreightBillDTO::new)
+            .toList();
+    }
 
     public void deleteFreightBill(Long id) {
         if (!freightBillRepository.existsById(id)) {

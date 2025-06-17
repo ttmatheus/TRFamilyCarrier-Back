@@ -4,7 +4,12 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
 
+
+@Getter
+@Setter
 public class CreateUserDTO {
 
 	@NotBlank
@@ -23,35 +28,14 @@ public class CreateUserDTO {
 	)
 	private String password;
 
+	private boolean active;
+
 	public CreateUserDTO() {}
 
-	public CreateUserDTO(String nome, String email, String password) {
-		this.name = nome;
-		this.email = email;
-		this.password = password;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getNome() {
-		return name;
-	}
-
-	public void setNome(String name) {
+	public CreateUserDTO(String name, String email, String password, boolean active) {
 		this.name = name;
+		this.email = email;
+		this.password = password;
+		this.active = active;
 	}
 }

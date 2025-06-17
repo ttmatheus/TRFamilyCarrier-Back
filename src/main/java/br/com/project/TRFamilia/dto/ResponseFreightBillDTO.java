@@ -9,25 +9,27 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class FreightBillDTO {
+public class ResponseFreightBillDTO {
     
-    private Long id;
+    private Integer id;
+    private Long tripId;
+    private BigDecimal companyRevenue;
     private BigDecimal initialValue;
     private BigDecimal remainingValue;
     private BigDecimal truckExpensesTotal;
-    private BigDecimal tripExpensesTotal;
     private BigDecimal driverPaymentValue;
-    private BigDecimal companyRevenue;
     private FreightBillStatus paymentStatus;
     private String notes;
 
-    public FreightBillDTO() {}
+    public ResponseFreightBillDTO() {}
 
-    public FreightBillDTO(FreightBill freightBill) {
+    public ResponseFreightBillDTO(FreightBill freightBill) {
+        this.id = freightBill.getId();
+        this.tripId = freightBill.getTrip().getId();
+        this.companyRevenue = freightBill.getCompanyRevenue();
         this.initialValue = freightBill.getInitialValue();
         this.remainingValue = freightBill.getRemainingValue();
         this.truckExpensesTotal = freightBill.getTruckExpensesTotal();
-        this.tripExpensesTotal = freightBill.getTripExpensesTotal();
         this.driverPaymentValue = freightBill.getDriverPaymentValue();
         this.companyRevenue = freightBill.getCompanyRevenue();
         this.paymentStatus = freightBill.getPaymentStatus();

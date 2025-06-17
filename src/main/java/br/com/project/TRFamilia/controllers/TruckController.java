@@ -1,10 +1,14 @@
 package br.com.project.TRFamilia.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import br.com.project.TRFamilia.annotations.JustAdmin;
 import br.com.project.TRFamilia.dto.CreateTruckDTO;
+import br.com.project.TRFamilia.dto.ResponseTruckDTO;
+import br.com.project.TRFamilia.dto.UpdateTruckDTO;
 import br.com.project.TRFamilia.models.Truck;
 import br.com.project.TRFamilia.services.TruckService;
 import jakarta.validation.Valid;
@@ -23,7 +27,7 @@ public class TruckController {
 
 	@PutMapping("/{id}")
 	@JustAdmin
-	public Truck updateTruck(@PathVariable Long id, @RequestBody @Valid CreateTruckDTO updateDto) {
+	public Truck updateTruck(@PathVariable Long id, @RequestBody @Valid UpdateTruckDTO updateDto) {
 		return truckService.updateTruck(id, updateDto);
 	}
 
@@ -31,5 +35,11 @@ public class TruckController {
 	@JustAdmin
 	public void deleteTruck(@PathVariable Long id) {
 		truckService.deleteTruck(id);
+	}
+
+	@GetMapping("/trucks")
+	@JustAdmin
+	public List<ResponseTruckDTO> getAllTrucks() {
+		return truckService.getAllTrucks();
 	}
 }

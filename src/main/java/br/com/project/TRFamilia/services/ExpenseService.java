@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import br.com.project.TRFamilia.dto.CreateExpenseDTO;
+import br.com.project.TRFamilia.dto.ResponseExpenseDTO;
 import br.com.project.TRFamilia.exceptions.ApiException;
 import br.com.project.TRFamilia.models.Expense;
 import br.com.project.TRFamilia.models.Trip;
@@ -46,9 +47,11 @@ public class ExpenseService {
         return expense;
     }
 
-    public List<Expense> getAllExpenses() {
+    public List<ResponseExpenseDTO> getAllExpenses() {
         List<Expense> expenses = expenseRepository.findAll();
-        return expenses;
+        return expenses.stream()
+                .map(ResponseExpenseDTO::new)
+                .toList();
     }
 
     public Expense updateExpense(Long id, CreateExpenseDTO dto) {

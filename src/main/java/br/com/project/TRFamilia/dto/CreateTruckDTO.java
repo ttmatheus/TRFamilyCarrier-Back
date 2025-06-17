@@ -11,7 +11,7 @@ public class CreateTruckDTO {
 	@NotBlank
     private String licensePlate;
 
-	@NotNull
+    @NotNull
     private BigDecimal currentMileage;
 
 	@NotBlank
@@ -23,7 +23,6 @@ public class CreateTruckDTO {
 	@NotNull
     private Integer year;
 
-	@NotBlank
     private String vinNumber;
 
 	@NotBlank
@@ -38,7 +37,6 @@ public class CreateTruckDTO {
 	@NotNull
     private LocalDate insuranceExpiration;
 
-	@NotBlank
     private String notes;
 
     public String getLicensePlate() {

@@ -1,6 +1,7 @@
 package br.com.project.TRFamilia.services;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import br.com.project.TRFamilia.dto.CreateDriverDTO;
+import br.com.project.TRFamilia.dto.ResponseDriverDTO;
 import br.com.project.TRFamilia.enums.DriverStatus;
 import br.com.project.TRFamilia.exceptions.ApiException;
 import br.com.project.TRFamilia.models.Driver;
@@ -54,5 +56,17 @@ public class DriverService {
 		driverRepository.save(driver);
 
 		return ResponseEntity.ok().body(driver);
+	}
+
+	public List<ResponseDriverDTO> getAllDrivers() {
+		List<Driver> drivers = driverRepository.findAll();
+
+		if (drivers.isEmpty()) {
+			throw new ApiException(404, "No drivers found", HttpStatus.NOT_FOUND);
+		}
+
+		return drivers.stream()
+			.map(ResponseDriverDTO::new)
+			.toList();
 	}
 }

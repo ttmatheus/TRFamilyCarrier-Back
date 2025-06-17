@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.project.TRFamilia.annotations.JustAdmin;
 import br.com.project.TRFamilia.dto.CreateTripDTO;
+import br.com.project.TRFamilia.dto.ResponseTripDTO;
 import br.com.project.TRFamilia.dto.TripDTO;
 import br.com.project.TRFamilia.services.TripService;
 import jakarta.validation.Valid;
@@ -32,5 +33,11 @@ public class TripController {
 	public List<TripDTO> getTrip(
 		@RequestParam(name = "user_id", required = true) Long userId) {
 		return tripService.getTripByUserId(userId);
+	}
+
+	@GetMapping("/trips")
+	@JustAdmin
+	public List<ResponseTripDTO> getAllTrips() {
+		return tripService.getAllTrips();
 	}
 }

@@ -7,11 +7,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import br.com.project.TRFamilia.dto.CreateExpenseDTO;
+import br.com.project.TRFamilia.dto.ResponseExpenseDTO;
 import br.com.project.TRFamilia.models.Expense;
 import br.com.project.TRFamilia.services.ExpenseService;
 
 @RestController
-@RequestMapping("expenses")
+@RequestMapping("expense")
 public class ExpenseController {
 
     @Autowired
@@ -28,8 +29,8 @@ public class ExpenseController {
         return ResponseEntity.ok(expenseService.getExpenseById(id));
     }
 
-    @GetMapping
-    public List<Expense> getExpenses() {
+    @GetMapping("/expenses")
+    public List<ResponseExpenseDTO> getExpenses() {
         return expenseService.getAllExpenses();
     }
 
