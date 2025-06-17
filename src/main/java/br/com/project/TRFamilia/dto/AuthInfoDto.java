@@ -5,13 +5,13 @@ import lombok.Getter;
 @Getter
 public class AuthInfoDto {
 	String email;
-	String role;
+	String userType;
 	String name;
 	Integer userId;
 
-	public AuthInfoDto(String email, String role, Integer userId, String name) {
+	public AuthInfoDto(String email, String userType, Integer userId, String name) {
 		this.email = email;
-		this.role = role;
+		this.userType = userType;
 		this.userId = userId;
 		this.name = name;
 	}
