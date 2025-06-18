@@ -51,12 +51,10 @@ public class FreightBillService {
             trip
         );
 
-        // Salvar o FreightBill antes de relacioná-lo à Trip
         freightBillRepository.save(freightBill);
 
-        // Relacionar e salvar a Trip, se necessário (opcional, se bidirecional)
         trip.setFreightBill(freightBill);
-        tripRepository.save(trip); // Opcional, só se precisar manter a relação bidirecional salva
+        tripRepository.save(trip);
 
         return freightBill;
     }
@@ -79,19 +77,16 @@ public class FreightBillService {
     }
 
     public List<ResponseFreightBillDTO> getFreightBillByUserId(Long id) {
-        // Buscar o motorista pelo ID do usuário
         Optional<Driver> driver = driverRepository.findByUser_id(id);
         if (!driver.isPresent()) {
             throw new ApiException(404, "Driver not found for user with ID: " + id, HttpStatus.NOT_FOUND);
         }
 
-        // Buscar todas as viagens associadas a esse motorista
         List<Trip> trips = tripRepository.findByDriverId_Id(driver.get().getId());
         if (trips.isEmpty()) {
             throw new ApiException(404, "Trips not found for user with ID: " + id, HttpStatus.NOT_FOUND);
         }
 
-        // Para cada viagem, buscar os FreightBills e achatar a lista
         List<FreightBill> freightBills = trips.stream()
             .flatMap(trip -> freightBillRepository.findByTripId_Id(trip.getId()).stream())
             .toList();
@@ -100,7 +95,6 @@ public class FreightBillService {
             throw new ApiException(404, "Freight Bill not found for user with ID: " + id, HttpStatus.NOT_FOUND);
         }
 
-        // Mapear para DTOs
         List<ResponseFreightBillDTO> freightBillDTOs = freightBills.stream()
             .map(ResponseFreightBillDTO::new)
             .toList();

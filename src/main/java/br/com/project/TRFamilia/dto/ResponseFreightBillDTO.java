@@ -1,6 +1,7 @@
 package br.com.project.TRFamilia.dto;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 import br.com.project.TRFamilia.enums.FreightBillStatus;
 import br.com.project.TRFamilia.models.FreightBill;
@@ -20,6 +21,8 @@ public class ResponseFreightBillDTO {
     private BigDecimal driverPaymentValue;
     private FreightBillStatus paymentStatus;
     private String notes;
+    private LocalDateTime createdAt;
+    private BigDecimal tripExpensesTotal;
 
     public ResponseFreightBillDTO() {}
 
@@ -34,5 +37,7 @@ public class ResponseFreightBillDTO {
         this.companyRevenue = freightBill.getCompanyRevenue();
         this.paymentStatus = freightBill.getPaymentStatus();
         this.notes = freightBill.getNotes();
+        this.createdAt = freightBill.getCreatedAt();
+        this.tripExpensesTotal = freightBill.getTripExpensesTotal();
     }
 }

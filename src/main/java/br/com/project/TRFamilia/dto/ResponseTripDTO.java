@@ -16,12 +16,6 @@ class DriverDTO {
 
 @Getter
 @Setter
-class TruckDTO {
-	private String license_plate;
-}
-
-@Getter
-@Setter
 public class ResponseTripDTO {
 	private Long id;
 	private String destination;
@@ -36,7 +30,8 @@ public class ResponseTripDTO {
 	private Optional<Long> driverId;
 	private Optional<Long> truckId;
 	private Optional<DriverDTO> driver;
-	private Optional<TruckDTO> truck;
+	private Optional<String> truckLicensePlate;
+	private BigDecimal expensesTotal;
 
 	public ResponseTripDTO(Trip trip) {
 		this.id = trip.getId();
@@ -52,7 +47,7 @@ public class ResponseTripDTO {
 		this.driverId = trip.getDriver() != null ? Optional.of(trip.getDriver().getId()) : Optional.empty();
 		this.truckId = trip.getTruck() != null ? Optional.of(trip.getTruck().getId()) : Optional.empty();
 		this.driver = trip.getDriver() != null ? Optional.of(new DriverDTO()) : Optional.empty();
-		this.truck = trip.getTruck() != null ? Optional.of(new TruckDTO()) : Optional.empty();
+		this.truckLicensePlate = trip.getTruck() != null ? Optional.of(trip.getTruck().getLicensePlate()) : Optional.empty();
 		if (trip.getDriver() != null) {
 			DriverDTO driverDTO = new DriverDTO();
 			driverDTO.setName(trip.getDriver().getUser().getName());

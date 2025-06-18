@@ -18,7 +18,7 @@ public class ResponseTruckDTO {
 	private String fuelType;
 	private BigDecimal maxLoadCapacity;
 	private BigDecimal currentMileage;
-	private String maintenceDueDate;
+	private String maintenanceDueDate;
 	private String insuranceExpiration;
 	private TruckStatus status;
 
@@ -31,7 +31,7 @@ public class ResponseTruckDTO {
 		this.fuelType = truck.getFuelType();
 		this.maxLoadCapacity = truck.getMaxLoadCapacity();
 		this.currentMileage = truck.getCurrentMileage();
-		this.maintenceDueDate = truck.getMaintenanceDueDate().toString();
+		this.maintenanceDueDate = truck.getMaintenanceDueDate().toString();
 		this.insuranceExpiration = truck.getInsuranceExpiration().toString();
 		this.status = truck.getStatus();
 	}
